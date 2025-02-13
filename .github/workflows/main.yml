@@ -19,12 +19,12 @@ jobs:
       # 下载指定的 Docker 镜像
       - name: Pull Docker Image
         run: |
-          docker pull wordpress:6.7.2-php8.2-fpm
+          docker pull wordpress:latest
 
       # 可选：保存镜像为 tar 文件
       - name: Save Docker Image as Tar
         run: |
-          docker save -o wordpress.tar wordpress:6.7.2-php8.2-fpm
+          docker save -o wordpress.tar wordpress:latest
 
       # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
