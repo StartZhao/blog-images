@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 检出代码（如果需要）
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       # 安装 Docker
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
@@ -22,9 +26,9 @@ jobs:
         run: |
           docker save -o wordpress.tar wordpress:6.7.2-php8.2-fpm
 
-      # 可选：上传镜像作为工作流 Artifact
+      # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wordpress-docker-image
           path: ./wordpress.tar
