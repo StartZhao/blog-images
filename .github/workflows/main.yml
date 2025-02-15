@@ -21,19 +21,30 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
+      # 输出输入参数以确认值是否正确
+      - name: Debug Input Parameters
+        run: |
+          echo "Image Name: ${{ github.event.inputs.image-name }}"
+          echo "Image Tag: ${{ github.event.inputs.image-tag }}"
+
       # 下载指定的 Docker 镜像
       - name: Pull Docker Image
         run: |
           docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
-      # 可选：保存镜像为 tar 文件
+      # 创建保存镜像的目录（如果不存在）
+      - name: Create Directory for Saving Image
+        run: |
+          mkdir -p ./docker-images
+
+      # 保存镜像为 tar 文件
       - name: Save Docker Image as Tar
         run: |
-          docker save -o ${GITHUB_WORKSPACE}/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
+          docker save -o ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
       # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}
-          path: ./${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar
+          path: ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar
