@@ -35,16 +35,16 @@ jobs:
       # 创建保存镜像的目录（如果不存在）
       - name: Create Directory for Saving Image
         run: |
-          mkdir -p ./docker-images
+          mkdir -p ./docker-images/${{ github.event.inputs.image-name }}
 
       # 保存镜像为 tar 文件
       - name: Save Docker Image as Tar
         run: |
-          docker save -o ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
+          docker save -o ./docker-images/${{ github.event.inputs.image-name }}/server-latest.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
       # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}
-          path: ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar
+          path: ./docker-images/${{ github.event.inputs.image-name }}/server-latest.tar
