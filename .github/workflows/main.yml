@@ -1,17 +1,22 @@
-name: Download Public Docker Image
+name: Download Public Docker Image with Dynamic Parameters
 
 on:
   workflow_dispatch: # 手动触发工作流
+    inputs:
+      image-name:
+        description: 'Docker Image Name (e.g., wordpress)' # 输入镜像名称
+        required: true
+        default: 'wordpress'
+      image-tag:
+        description: 'Docker Image Tag (e.g., latest)' # 输入镜像标签
+        required: true
+        default: 'latest'
 
 jobs:
   download-docker-image:
     runs-on: ubuntu-latest
 
     steps:
-      # 检出代码（如果需要）
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
       # 安装 Docker
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
@@ -19,16 +24,16 @@ jobs:
       # 下载指定的 Docker 镜像
       - name: Pull Docker Image
         run: |
-          docker pull wordpress:latest
+          docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
       # 可选：保存镜像为 tar 文件
       - name: Save Docker Image as Tar
         run: |
-          docker save -o wordpress.tar wordpress:latest
+          docker save -o ${GITHUB_WORKSPACE}/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
       # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: wordpress-docker-image
-          path: ./wordpress.tar
+          name: ${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}
+          path: ./${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar
