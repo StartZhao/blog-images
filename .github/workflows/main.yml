@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # 手动触发工作流
     inputs:
       image-name:
-        description: 'Docker Image Name (e.g., vaultwarden)' # 输入镜像名称
+        description: 'Docker Image Name (e.g., wordpress)' # 输入镜像名称
         required: true
         default: 'vaultwarden'
       image-tag:
@@ -32,19 +32,14 @@ jobs:
         run: |
           docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
-      # 创建保存镜像的目录（如果不存在）
-      - name: Create Directory for Saving Image
-        run: |
-          mkdir -p ./docker-images/${{ github.event.inputs.image-name }}
-
       # 保存镜像为 tar 文件
       - name: Save Docker Image as Tar
         run: |
-          docker save -o ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
+          docker save -o images.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
       # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}
-          path: ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar
+          path: images.tar
