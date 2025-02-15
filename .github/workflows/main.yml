@@ -41,5 +41,5 @@ jobs:
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}
+          name: images
           path: images.tar
