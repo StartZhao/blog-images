@@ -4,9 +4,9 @@ on:
   workflow_dispatch: # 手动触发工作流
     inputs:
       image-name:
-        description: 'Docker Image Name (e.g., wordpress)' # 输入镜像名称
+        description: 'Docker Image Name (e.g., vaultwarden)' # 输入镜像名称
         required: true
-        default: 'wordpress'
+        default: 'vaultwarden'
       image-tag:
         description: 'Docker Image Tag (e.g., latest)' # 输入镜像标签
         required: true
@@ -27,7 +27,7 @@ jobs:
           echo "Image Name: ${{ github.event.inputs.image-name }}"
           echo "Image Tag: ${{ github.event.inputs.image-tag }}"
 
-      # 下载指定的 Docker 镜像
+      # 下载指定的 Docker 像
       - name: Pull Docker Image
         run: |
           docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
@@ -40,11 +40,11 @@ jobs:
       # 保存镜像为 tar 文件
       - name: Save Docker Image as Tar
         run: |
-          docker save -o ./docker-images/${{ github.event.inputs.image-name }}/server-latest.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
+          docker save -o ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
 
       # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}
-          path: ./docker-images/${{ github.event.inputs.image-name }}/server-latest.tar
+          path: ./docker-images/${{ github.event.inputs.image-name }}-${{ github.event.inputs.image-tag }}.tar
