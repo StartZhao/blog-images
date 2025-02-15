@@ -27,7 +27,7 @@ jobs:
           echo "Image Name: ${{ github.event.inputs.image-name }}"
           echo "Image Tag: ${{ github.event.inputs.image-tag }}"
 
-      # 下载指定的 Docker 像
+      # 下载指定的 Docker 
       - name: Pull Docker Image
         run: |
           docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
