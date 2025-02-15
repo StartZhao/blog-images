@@ -6,7 +6,7 @@ on:
       image-name:
         description: 'Docker Image Name (e.g., wordpress)' # 输入镜像名称
         required: true
-        default: 'vaultwarden'
+        default: 'wordpress'
       image-tag:
         description: 'Docker Image Tag (e.g., latest)' # 输入镜像标签
         required: true
