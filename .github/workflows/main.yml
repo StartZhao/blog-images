@@ -20,19 +20,18 @@ jobs:
       # 输出输入参数以确认值是否正确
       - name: Debug Input Parameters
         run: |
-          echo "Image Name: ${{ github.event.inputs.image-name }}"
-          echo "Image Tag: ${{ github.event.inputs.image-tag }}"
+          echo "Image: ${{ github.event.inputs.image }}"
 
       # 下载指定的 Docker 
       - name: Pull Docker Image
         run: |
-          docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
+          docker pull ${{ github.event.inputs.image }}
 
       # 保存镜像为 tar 文件
       - name: Save Docker Image as Tar
         run: |
-          docker save -o images.tar ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
-
+          docker save -o images.tar ${{ github.event.inputs.image }}
+          
       # 使用最新版本上传 Artifact
       - name: Upload Docker Image as Artifact
         uses: actions/upload-artifact@v4
