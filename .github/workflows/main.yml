@@ -3,15 +3,11 @@ name: Download Public Docker Image with Dynamic Parameters
 on:
   workflow_dispatch: # 手动触发工作流
     inputs:
-      image-name:
-        description: 'Docker Image Name (e.g., wordpress)' # 输入镜像名称
+      image:
+        description: 'Docker Image Name (e.g., wordpress:latest)' # 输入镜像
         required: true
-        default: 'wordpress'
-      image-tag:
-        description: 'Docker Image Tag (e.g., latest)' # 输入镜像标签
-        required: true
-        default: 'latest'
-
+        default: 'wordpress:latest'
+        
 jobs:
   download-docker-image:
     runs-on: ubuntu-latest
